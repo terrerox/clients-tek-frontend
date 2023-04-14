@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Link as ReachLink } from "react-router-dom";
 import { 
   Text,
@@ -11,19 +11,28 @@ import {
   useDisclosure
 } from "@chakra-ui/react";
 import { addressesService } from '../services/addressesService';
+import { clientsService } from '../services/clientsService';
 import { AddressesTable } from "../components/addresses/AddressesTable"
 import { AddressModal } from "../components/addresses/AddressModal"
-import { Address, CreateAddressInput, UpdateAddressInput } from "../types";
+import { Address, CreateAddressInput, GraphQlResponse, UpdateAddressInput } from "../types";
+import { AppContext } from '../context';
 
 export const AddressesView = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { setClients } = useContext(AppContext);
   const [addresses, setAddresses] = useState<Address[]>([])
   const [address, setAddress] = useState<Address | null>(null)
   const toast = useToast()
 
   useEffect(() => {
-    addressesService.findAll()
-      .then(({ data: { addresses } }) => setAddresses(addresses))
+    const getClientsAndAddresses = async(): Promise<void> => {
+      const [addressesJson, clientsJson] = await Promise.all([addressesService.findAll(), clientsService.findAll()])
+      const { data: { addresses } } = addressesJson
+      const { data: { clients } } = clientsJson
+      setClients(clients);
+      setAddresses(addresses);
+    }
+    getClientsAndAddresses()
   }, [])
 
   const deleteAddress = (id: string): void => {

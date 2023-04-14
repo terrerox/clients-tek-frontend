@@ -63,7 +63,7 @@ export const AddressForm = ({formValues, handleInputChange}: Props) => {
             onChange={handleInputChange}
             value={zipCode}
         />
-       <FormLabel>Clients</FormLabel>
+       <FormLabel>Client</FormLabel>
        <Select 
           placeholder='Select option'
           onChange={handleInputChange}
