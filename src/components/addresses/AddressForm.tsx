@@ -11,7 +11,7 @@ import { AppContext } from '../../context'
 
 interface Props {
   formValues: CreateAddressInput,
-  handleInputChange: ({ target }: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void
+  handleInputChange: ({ target }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void
 }
 
 export const AddressForm = ({formValues, handleInputChange}: Props) => {
